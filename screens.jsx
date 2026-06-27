@@ -779,7 +779,7 @@ function StatsScreen({ group, members, progressMap, cheers, onBack }) {
 }
 
 // =============== 설정 화면 ===============
-function SettingsScreen({ group, currentMember, members, onBack, onUpdateGroup, onAddMember, onResetAll, onShare, onSwitchUser }) {
+function SettingsScreen({ group, currentMember, members, onBack, onUpdateGroup, onAddMember, onResetAll, onShare, onSwitchUser, onLogout }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(group);
 
