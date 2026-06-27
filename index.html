@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>탄방5다락방 · 성경 통독</title>
+<meta name="theme-color" content="#B8855A">
+<meta name="description" content="교회 다락방 성경 통독 진도 트래커">
+
+<!-- PWA / iOS 홈 화면 추가 -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="다락방 통독">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+<style>
+:root {
+  --bg: #F5EFE3;
+  --surface: #FFFFFF;
+  --surfaceAlt: #FAF4E8;
+  --text: #2D2218;
+  --textSub: #6F5F4C;
+  --textMute: #9B8B76;
+  --border: #E6DBC4;
+  --accent: #B8855A;
+  --accentDeep: #8E5E36;
+  --accentSoft: #E8D4B8;
+  --success: #7A9460;
+  --radius: 18px;
+  --radiusSm: 12px;
+  --fontHeading: "Gowun Batang", "Noto Serif KR", serif;
+  --fontBody: "Pretendard", -apple-system, sans-serif;
+  --progressTrack: #EFE5D2;
+  --progressFill: #B8855A;
+  --cardShadow: 0 2px 8px rgba(60, 40, 20, 0.06);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: var(--fontBody);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+#app-shell {
+  max-width: 420px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 데스크탑 — 모바일 프레임 흉내 */
+@media (min-width: 700px) {
+  body {
+    background: linear-gradient(180deg, #DDD3C2 0%, #C9BBA4 100%);
+    padding: 30px 20px;
+  }
+  #app-shell {
+    border-radius: 32px;
+    min-height: 820px;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 8px 40px rgba(60, 40, 20, 0.12);
+  }
+}
+
+button { font-family: inherit; }
+input, select, textarea { font-family: inherit; -webkit-appearance: none; appearance: none; }
+input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.6; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 999px; }
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236F5F4C' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px !important;
+}
+</style>
+</head>
+<body>
+  <div id="app-shell">
+    <div id="root">
+      <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; color: #6F5F4C;">
+        <div style="font-size: 28px;">📖</div>
+        <div style="font-size: 13px;">앱 불러오는 중...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase 초기화 (ESM 모듈) -->
+  <script type="module" src="firebase-config.js"></script>
+
+  <!-- React 18 + Babel (CDN, integrity 고정) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- 앱 스크립트 -->
+  <script src="bible-data.js"></script>
+  <script src="theme.js"></script>
+  <script type="text/babel" src="tweaks_panel.jsx"></script>
+  <script type="text/babel" src="screens.jsx"></script>
+  <script type="text/babel" src="screens-auth.jsx"></script>
+  <script type="text/babel" src="app-firebase.jsx"></script>
+</body>
+</html>

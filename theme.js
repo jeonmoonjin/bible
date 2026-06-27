@@ -1,0 +1,85 @@
+// 3가지 시안 테마 - Tweaks로 전환
+window.THEMES = {
+  warm: {
+    name: '베이지 우드',
+    subtitle: '따뜻하고 부드러운 크림+캐러멜',
+    bg: '#F5EFE3',
+    surface: '#FFFFFF',
+    surfaceAlt: '#FAF4E8',
+    surfaceDeep: '#EFE5D2',
+    border: '#E6DBC4',
+    text: '#2D2218',
+    textSub: '#6F5F4C',
+    textMute: '#9B8B76',
+    accent: '#B8855A',
+    accentDeep: '#8E5E36',
+    accentSoft: '#E8D4B8',
+    success: '#7A9460',
+    warning: '#D88B4A',
+    cardShadow: '0 2px 8px rgba(60, 40, 20, 0.06)',
+    fontHeading: '"Gowun Batang", "Noto Serif KR", serif',
+    fontBody: '"Pretendard", -apple-system, BlinkMacSystemFont, sans-serif',
+    radius: '18px',
+    radiusSm: '12px',
+    progressTrack: '#EFE5D2',
+    progressFill: '#B8855A',
+  },
+  scripture: {
+    name: '딥 우드',
+    subtitle: '차분하고 경건한 다크 우드+세리프',
+    bg: '#1F1812',
+    surface: '#2A2118',
+    surfaceAlt: '#332921',
+    surfaceDeep: '#3D3027',
+    border: '#4A3C30',
+    text: '#F4EBDB',
+    textSub: '#BFB199',
+    textMute: '#8A7C68',
+    accent: '#D4A574',
+    accentDeep: '#E8C896',
+    accentSoft: '#5A4533',
+    success: '#A8C088',
+    warning: '#E8A86A',
+    cardShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+    fontHeading: '"Gowun Batang", "Noto Serif KR", serif',
+    fontBody: '"Pretendard", -apple-system, BlinkMacSystemFont, sans-serif',
+    radius: '14px',
+    radiusSm: '10px',
+    progressTrack: '#3D3027',
+    progressFill: '#D4A574',
+  },
+  cream: {
+    name: '크림 코랄',
+    subtitle: '밝고 친근한 화이트+코랄',
+    bg: '#FBF7F2',
+    surface: '#FFFFFF',
+    surfaceAlt: '#FFF4EC',
+    surfaceDeep: '#FCE8D8',
+    border: '#F0E2D2',
+    text: '#3A2A22',
+    textSub: '#7B5F52',
+    textMute: '#B09989',
+    accent: '#E89578',
+    accentDeep: '#C76A4A',
+    accentSoft: '#FAD9C8',
+    success: '#92B07A',
+    warning: '#E8A56A',
+    cardShadow: '0 3px 12px rgba(200, 130, 90, 0.08)',
+    fontHeading: '"Gowun Dodum", "Pretendard", sans-serif',
+    fontBody: '"Pretendard", -apple-system, BlinkMacSystemFont, sans-serif',
+    radius: '22px',
+    radiusSm: '14px',
+    progressTrack: '#FCE8D8',
+    progressFill: '#E89578',
+  },
+};
+
+window.applyTheme = function(themeKey) {
+  const t = window.THEMES[themeKey] || window.THEMES.warm;
+  const root = document.documentElement;
+  Object.entries(t).forEach(([k, v]) => {
+    if (typeof v === 'string') root.style.setProperty(`--${k}`, v);
+  });
+  root.style.setProperty('--theme-key', themeKey);
+  return t;
+};
