@@ -3,14 +3,34 @@ const { useState: useStateF, useEffect: useEffectF, useMemo: useMemoF } = React;
 
 const SESSION_KEY = 'darakbang_session_v1';
 
+function loadSavedSession() {
+  try {
+    // 기존 sessionStorage 사용자도 한 번은 살려주기 위한 호환 처리
+    const saved =
+      localStorage.getItem(SESSION_KEY) ||
+      sessionStorage.getItem(SESSION_KEY);
+
+    return saved ? JSON.parse(saved) : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveSession(session) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+}
+
+function clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(SESSION_KEY);
+}
+
 function BibleAppFirebase() {
   const [group, setGroup] = useStateF(null);
   const [members, setMembers] = useStateF([]);
   const [progressMap, setProgressMap] = useStateF({});
   const [cheers, setCheers] = useStateF([]);
-  const [currentMemberId, setCurrentMemberId] = useStateF(() => {
-    try { return JSON.parse(sessionStorage.getItem(SESSION_KEY))?.id || null; } catch { return null; }
-  });
+  const [membersLoaded, setMembersLoaded] = useStateF(false);
   const [screen, setScreen] = useStateF('home');
   const [ready, setReady] = useStateF(false);
   const [fbReady, setFbReady] = useStateF(false);
@@ -57,8 +77,8 @@ function BibleAppFirebase() {
         const list = snap.docs.map(d => ({ id: d.id, ...d.data() }))
           .sort((a, b) => (a.joinedAt?.seconds || 0) - (b.joinedAt?.seconds || 0));
         setMembers(list);
+        setMembersLoaded(true);
       }));
-
       unsubs.push(FB.onSnapshot(FB.progressRef(), (snap) => {
         const map = {};
         snap.docs.forEach(d => {
@@ -96,7 +116,7 @@ function BibleAppFirebase() {
     });
     // 빈 진도 문서 초기화
     await FB.setDoc(FB.progressDocRef(newId), { chapters: {} });
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ id: newId, name }));
+    saveSession({ id: newId, name });
     setCurrentMemberId(newId);
   };
 
@@ -104,7 +124,7 @@ function BibleAppFirebase() {
     const pinHash = await FB.hashPin(pin);
     const snap = await FB.getDoc(FB.memberRef(member.id));
     if (snap.exists() && snap.data().pinHash === pinHash) {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify({ id: member.id, name: member.name }));
+      saveSession({ id: member.id, name: member.name });
       setCurrentMemberId(member.id);
       return true;
     }
@@ -112,7 +132,7 @@ function BibleAppFirebase() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem(SESSION_KEY);
+    clearSession();
     setCurrentMemberId(null);
     setScreen('home');
   };
@@ -178,7 +198,7 @@ function BibleAppFirebase() {
       progSnap.docs.forEach(d => batch.delete(d.ref));
       cheerSnap.docs.forEach(d => batch.delete(d.ref));
       await batch.commit();
-      sessionStorage.removeItem(SESSION_KEY);
+      clearSession();
       setCurrentMemberId(null);
       alert('초기화 완료');
     } catch (e) {
@@ -199,7 +219,7 @@ function BibleAppFirebase() {
 
   // ============ 렌더 ============
 
-  if (!fbReady || !ready || !group) {
+  if (!fbReady || !ready || !group || !membersLoaded) {
     return (
       <div style={{
         minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
