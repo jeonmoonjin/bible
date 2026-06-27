@@ -30,6 +30,11 @@ function BibleAppFirebase() {
   const [members, setMembers] = useStateF([]);
   const [progressMap, setProgressMap] = useStateF({});
   const [cheers, setCheers] = useStateF([]);
+
+  const [currentMemberId, setCurrentMemberId] = useStateF(() => {
+    return loadSavedSession()?.id || null;
+  });
+
   const [membersLoaded, setMembersLoaded] = useStateF(false);
   const [screen, setScreen] = useStateF('home');
   const [ready, setReady] = useStateF(false);
