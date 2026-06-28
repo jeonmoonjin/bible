@@ -65,9 +65,9 @@ function BibleAppFirebase() {
       const gSnap = await FB.getDoc(FB.groupRef());
       if (!gSnap.exists()) {
         await FB.setDoc(FB.groupRef(), {
-          name: '탄방5다락방',
-          startDate: '2026-05-01',
-          endDate: '2026-10-31',
+          name: '새로남다락방',
+          startDate: '2026-06-28',
+          endDate: '2026-08-30',
           scope: 'all',
           createdAt: FB.serverTimestamp(),
         });
