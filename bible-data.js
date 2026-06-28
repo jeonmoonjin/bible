@@ -186,16 +186,46 @@ function getExpectedProgress(group) {
 }
 window.getExpectedProgress = getExpectedProgress;
 
+function toMillis(value) {
+  if (!value) return 0;
+
+  // 이미 Date.now() 형태의 숫자인 경우
+  if (typeof value === 'number') return value;
+
+  // Firestore Timestamp 객체인 경우
+  if (typeof value.toMillis === 'function') {
+    return value.toMillis();
+  }
+
+  // Firestore Timestamp가 일반 객체처럼 들어온 경우
+  if (typeof value.seconds === 'number') {
+    return value.seconds * 1000;
+  }
+
+  // Date 객체인 경우
+  if (value instanceof Date) {
+    return value.getTime();
+  }
+
+  return 0;
+}
+
 // 이번 주(월~일) 읽은 장 수
 window.calcWeeklyReads = function(memberProgress) {
   const now = new Date();
   const day = now.getDay(); // 0 (일) ~ 6 (토)
+
   const monday = new Date(now);
   monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1));
   monday.setHours(0, 0, 0, 0);
+
+  const weekStartMs = monday.getTime();
+
   let count = 0;
   for (const ts of Object.values(memberProgress)) {
-    if (ts >= monday.getTime()) count++;
+    const checkedAtMs = toMillis(ts);
+    if (checkedAtMs >= weekStartMs) count++;
   }
+
   return count;
 };
